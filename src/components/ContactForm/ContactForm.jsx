@@ -3,9 +3,9 @@ import 'yup-phone';
 import { Formik } from 'formik';
 import { StyledForm, Label, Input, Error, Button } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
+import { addContact } from 'redux/operations';
 import { toast } from 'react-hot-toast';
-import { getContacts } from 'redux/selectors';
+import { selectContacts } from 'redux/selectors';
 
 let schema = yup.object().shape({
   name: yup.string().min(3).required(),
@@ -19,7 +19,7 @@ const initialValues = {
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
 
   const handleSubmit = (values, { resetForm }) => {
     if (contacts.find(contact => contact.name === values.name)) {
@@ -29,9 +29,9 @@ export const ContactForm = () => {
 
     dispatch(addContact(values));
 
-    toast.success('Contact successfully added!');
-
     resetForm();
+
+    toast.success('Contact successfully added!');
   };
 
   return (
